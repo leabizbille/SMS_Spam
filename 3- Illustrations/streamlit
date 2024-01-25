@@ -1,0 +1,36 @@
+# Import necessary libraries
+import streamlit as st  # Streamlit library for creating web applications
+import pandas as pd  # Pandas for data manipulation and analysis
+from sklearn.feature_extraction.text import CountVectorizer  # CountVectorizer for converting text data to numerical format
+from sklearn.naive_bayes import MultinomialNB  # Multinomial Naive Bayes classifier
+from sklearn.pipeline import make_pipeline  # Creating a pipeline for machine learning tasks
+
+# Load your preprocessed data
+# Assuming you have a DataFrame with 'text' and 'label' columns
+# Replace 'your_data.csv' with the actual file path or data source
+  # Load preprocessed data into a DataFrame
+data = pd.read_csv('https://raw.githubusercontent.com/remijul/dataset/master/SMSSpamCollection', sep='\t', header=None, names=['label', 'text'])
+
+# Train a simple model (you may want to use your trained model here)
+model = make_pipeline(CountVectorizer(), MultinomialNB())  # Create a pipeline with CountVectorizer and Multinomial Naive Bayes
+model.fit(data['text'], data['label'])  # Train the model on the preprocessed data
+
+# Streamlit app
+st.title('HamSpam Classifier')  # Set the title of the Streamlit app
+
+# Input text box for user to enter a message
+user_input = st.text_area('Enter a message:', 'Type your message here.')  # Text area for user input
+
+# Make a prediction when the user clicks the "Predict" button
+if st.button('Predict'):  # Check if the "Predict" button is clicked
+    prediction = model.predict([user_input])  # Make a prediction using the trained model
+    st.write('Prediction:', prediction[0])  # Display the prediction result
+
+# Optional: Display some information about the model or your project
+st.sidebar.title('About')  # Set the title for the sidebar
+st.sidebar.info('This is a simple HamSpam classifier using Streamlit.')  # Display information in the sidebar
+
+# Optional: Display sample data
+if st.checkbox('Show Sample Data'):  # Check if the "Show Sample Data" checkbox is selected
+    st.write('Sample Data:', data.head())  # Display a sample of the preprocessed data
+ 
